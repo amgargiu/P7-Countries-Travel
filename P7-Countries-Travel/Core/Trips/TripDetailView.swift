@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TripDetailView: View {
     
+    //@Observed since already init this viewmodel
     @ObservedObject var vm: AllTripsViewModel
     let tripEntity: TripEntity
 
