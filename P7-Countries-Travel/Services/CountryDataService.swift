@@ -47,7 +47,8 @@ class CountryDataService2 {
     
 
     var cancellables: Set<AnyCancellable> = []
-    
+    @Published var allCountries: [CountryModel] = []
+
     
     init() {
         
@@ -80,6 +81,7 @@ class CountryDataService2 {
                 print(receivedData)
                 let jsonString = String(data: receivedData, encoding: .utf8)
                 print(jsonString)
+
             }
             .store(in: &cancellables)
         

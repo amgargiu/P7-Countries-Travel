@@ -9,9 +9,11 @@ import SwiftUI
 
 struct NewTripView: View {
     
+    
     @StateObject var vm = NewTripViewModel()
     
     let country: CountryModel
+
     
     // Trip Entity - city, country, imageURL, Desc
     
@@ -21,108 +23,113 @@ struct NewTripView: View {
     @State var inputURL: String? = nil
     @State var inputURLTextField: String = ""
 
-    enum Route: Hashable {
-        case list
-    }
+    @Binding var path: [Route]   // 👈 THIS is required
     
     
     var body: some View {
         
-        VStack (alignment: .leading) {
-            
-            HStack {
-                Text("Country:")
-                    .bold()
-                Text(country.name?.common ?? "")
-            }
-            TextField("What City?", text: $cityTextField)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal,10)
-                .background(
-                    Capsule()
-                        .fill(Color(.systemGray6))
-                )
-            
+        ScrollView {
+            VStack (alignment: .leading) {
                 
-            
-            if inputURL == nil || inputURL == "" {
-                Image("default")
-                    .resizable()
-                    .frame(height: 300)
-                    .scaledToFit()
-                    .cornerRadius(10)
-            } else {
-                let url = URL(string: inputURL ?? "")
-                AsyncImage(url: url) { image in
-                    image
-                        .resizable()
-                        .frame(height: 300)
-                        .frame(maxWidth: .infinity)
-                        .scaledToFit()
-                        .cornerRadius(10)
-                } placeholder: {
-                    ProgressView()
+                HStack {
+                    Text("Country:")
+                        .bold()
+                    Text(country.name?.common ?? "")
                 }
-            }
-            
-            HStack {
-                TextField("Cover Photo URL", text: $inputURLTextField)
+                TextField("What City?", text: $cityTextField)
                     .foregroundStyle(.secondary)
-                    .padding(.horizontal,5)
+                    .padding(.horizontal,10)
                     .background(
                         Capsule()
                             .fill(Color(.systemGray6))
                     )
                 
                 
-                Button("Update Photo") {
-                    inputURL = inputURLTextField
-                    inputURLTextField = ""
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            
-            HStack {
-                Text("Capital:")
-                    .bold()
-                Text(country.capital?.first ?? "No Capital")
-            }
-            .textSelection(.enabled)
-            
-            
-            TextEditor(text: $newTripDesc)
-                .frame(height: 150)
-                .scrollContentBackground(.hidden)
-                .padding(8)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-            
-            Spacer()
-
-        }
-        .padding(.horizontal)
-        .navigationTitle("New Trip")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
                 
-                NavigationLink(value: Route.list) {
+                if inputURL == nil || inputURL == "" {
+                    Image("default")
+                        .resizable()
+                        .frame(height: 300)
+                        .scaledToFit()
+                        .cornerRadius(10)
+                } else {
+                    let url = URL(string: inputURL ?? "")
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .frame(height: 300)
+                            .frame(maxWidth: .infinity)
+                            .scaledToFit()
+                            .cornerRadius(10)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                }
+                
+                HStack {
+                    TextField("Cover Photo URL", text: $inputURLTextField)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal,5)
+                        .background(
+                            Capsule()
+                                .fill(Color(.systemGray6))
+                        )
+                    
+                    
+                    Button("Update Photo") {
+                        inputURL = inputURLTextField
+                        inputURLTextField = ""
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                
+                HStack {
+                    Text("Capital:")
+                        .bold()
+                    Text(country.capital?.first ?? "No Capital")
+                }
+                .textSelection(.enabled)
+                
+                
+                TextEditor(text: $newTripDesc)
+                    .frame(height: 150)
+                    .scrollContentBackground(.hidden)
+                    .padding(8)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                
+                Spacer()
+                
+            }
+            .padding(.horizontal)
+            .navigationTitle("New Trip")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         // Function to ADD to CD
                         vm.addTrip(
                             tripCity: cityTextField,
-                            tripCountry: country.id,
+                            tripCountry: country.id, // when we make a trip entity - put the country.id as the tripCountry - which is also what we use to Cache as key...
                             tripDesc: newTripDesc,
                             tripImageURL: inputURL ?? ""
                         )
-                        vm.refreshData() // dont really need since add calls save/refrsh soooo
+                        // 👇 navigate programmatically
+                        path = [.allTrips]
                     } // End button
-                } // End NavLink
-            } // End Toolbar Item
-        }
-        .navigationDestination(for: Route.self) { route in
-            switch route {
-            case .list: AllTripsView()
+                } // End Toolbar Item
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Nevermind") {
+                        // 👇 navigate programmatically
+                        path = []
+                    } // End button
+                } // End Toolbar Item
             }
+        } // end ScrollView
+        .scrollDismissesKeyboard(.interactively)
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
                 
     }
@@ -131,6 +138,6 @@ struct NewTripView: View {
 #Preview {
     
     NavigationStack {
-        NewTripView(country: DevPreview.previewCountry)
+        NewTripView(country: DevPreview.previewCountry, path: .constant([]))
     }
 }

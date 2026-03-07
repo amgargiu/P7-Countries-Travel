@@ -12,10 +12,10 @@ import Combine
 class NetworkingManager {
     
     // Custom Error handler
-    
     enum NetworkError : LocalizedError {
         case badURLResponse(url: URL) // whenever it's this case ti requires a URL to ba passed in
         case unkown
+        
         
         // computed property for enum - makes something for any case
         var errorMessage: String {
@@ -26,7 +26,6 @@ class NetworkingManager {
                 return "Unknown Error"
             }
         }
-        
     }
     
     

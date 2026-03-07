@@ -34,6 +34,9 @@
 		73A0B6C82F562F3A007D8B33 /* AllTripsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A0B6C72F562F3A007D8B33 /* AllTripsViewModel.swift */; };
 		73A0B6CA2F5633F9007D8B33 /* TripListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A0B6C92F5633F9007D8B33 /* TripListItemView.swift */; };
 		73A0B6CC2F569691007D8B33 /* TripDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A0B6CB2F569691007D8B33 /* TripDetailView.swift */; };
+		73A0B6CE2F57F60C007D8B33 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A0B6CD2F57F60C007D8B33 /* Route.swift */; };
+		73A0B6D02F57FBEB007D8B33 /* XMarkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A0B6CF2F57FBEB007D8B33 /* XMarkButton.swift */; };
+		73A0B6D62F5A8226007D8B33 /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A0B6D52F5A8226007D8B33 /* LocalFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +68,9 @@
 		73A0B6C72F562F3A007D8B33 /* AllTripsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTripsViewModel.swift; sourceTree = "<group>"; };
 		73A0B6C92F5633F9007D8B33 /* TripListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripListItemView.swift; sourceTree = "<group>"; };
 		73A0B6CB2F569691007D8B33 /* TripDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailView.swift; sourceTree = "<group>"; };
+		73A0B6CD2F57F60C007D8B33 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		73A0B6CF2F57FBEB007D8B33 /* XMarkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMarkButton.swift; sourceTree = "<group>"; };
+		73A0B6D52F5A8226007D8B33 /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +120,7 @@
 			children = (
 				7371DA382F496BCB00744F31 /* CountryModel.swift */,
 				73A0B6682F537C7A007D8B33 /* TripContainer.xcdatamodeld */,
+				73A0B6CD2F57F60C007D8B33 /* Route.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -123,6 +130,7 @@
 			children = (
 				73A0B6592F4BEC18007D8B33 /* CacheManager.swift */,
 				73A0B6642F526523007D8B33 /* NetworkingManager.swift */,
+				73A0B6D52F5A8226007D8B33 /* LocalFileManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -162,6 +170,7 @@
 				7371DA452F49832200744F31 /* CountryFlagImage */,
 				73A0B6572F4BA6BD007D8B33 /* CircleButtonView.swift */,
 				73A0B6662F52A33D007D8B33 /* SearchBarView.swift */,
+				73A0B6CF2F57FBEB007D8B33 /* XMarkButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -206,7 +215,8 @@
 		73A0B64D2F49913A007D8B33 /* Trips */ = {
 			isa = PBXGroup;
 			children = (
-				73A0B6C72F562F3A007D8B33 /* AllTripsViewModel.swift */,
+				73A0B6D32F5A7278007D8B33 /* ViewModels */,
+				73A0B6D42F5A7281007D8B33 /* Views */,
 				73A0B6C52F562F2E007D8B33 /* AllTripsView.swift */,
 				73A0B6C92F5633F9007D8B33 /* TripListItemView.swift */,
 				73A0B6CB2F569691007D8B33 /* TripDetailView.swift */,
@@ -230,6 +240,21 @@
 				7371DA3A2F496FDF00744F31 /* SelectCountry */,
 			);
 			path = NewTrip;
+			sourceTree = "<group>";
+		};
+		73A0B6D32F5A7278007D8B33 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				73A0B6C72F562F3A007D8B33 /* AllTripsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		73A0B6D42F5A7281007D8B33 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,6 +332,7 @@
 				73A0B6672F52A33D007D8B33 /* SearchBarView.swift in Sources */,
 				7371DA4F2F49850600744F31 /* DevPreview.swift in Sources */,
 				73A0B66C2F552C17007D8B33 /* TripsDataService.swift in Sources */,
+				73A0B6D02F57FBEB007D8B33 /* XMarkButton.swift in Sources */,
 				73A0B6602F4BF900007D8B33 /* test.swift in Sources */,
 				7371DA272F496A4800744F31 /* ContentView.swift in Sources */,
 				73A0B6512F4995FE007D8B33 /* CountryRowView.swift in Sources */,
@@ -322,8 +348,10 @@
 				7371DA392F496BCB00744F31 /* CountryModel.swift in Sources */,
 				7371DA4D2F49846200744F31 /* CountryFlagView.swift in Sources */,
 				73A0B6632F4C0530007D8B33 /* NewTripView.swift in Sources */,
+				73A0B6CE2F57F60C007D8B33 /* Route.swift in Sources */,
 				7371DA492F49836300744F31 /* CountryFlagViewModel.swift in Sources */,
 				73A0B6CC2F569691007D8B33 /* TripDetailView.swift in Sources */,
+				73A0B6D62F5A8226007D8B33 /* LocalFileManager.swift in Sources */,
 				73A0B65A2F4BEC18007D8B33 /* CacheManager.swift in Sources */,
 				73A0B65C2F4BEE15007D8B33 /* StartViewModel.swift in Sources */,
 				73A0B6562F49A112007D8B33 /* StartView.swift in Sources */,

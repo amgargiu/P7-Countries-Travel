@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CountryListView: View {
     
+    @Binding var path: [Route]
     @StateObject var vm = CountryListViewModel()
     
     var body: some View {
@@ -31,29 +32,26 @@ struct CountryListView: View {
             .foregroundStyle(.secondary)
 
             List {
-
                 ForEach(vm.allCountries) { country in
                     if country.population != 0 {
-                        NavigationLink(value: country) {
-                            CountryRowView(country: country)
-                        }
-                        
+                        CountryRowView(country: country)
+                            .onTapGesture {
+                                path.append(.newTrip(country))
+                            }
                     }
                 }
             }
             .listStyle(PlainListStyle())
         }
         .navigationTitle(Text("Which Country?"))
-        .navigationDestination(for: CountryModel.self) { country in
-            NewTripView(country: country)
-        }
+        
         
     }
 }
 
 #Preview {
     NavigationStack {
-        CountryListView()
+        CountryListView(path: .constant([]))
             .environmentObject(DevPreview.vm)
     }
 }

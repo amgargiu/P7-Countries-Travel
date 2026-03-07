@@ -11,11 +11,8 @@ import SwiftUI
 struct P7_Countries_TravelApp: App {
     var body: some Scene {
         WindowGroup {
-            
-            NavigationStack {
-                StartView()
-            }
-            
+            StartView()
+     
         }
     }
 }

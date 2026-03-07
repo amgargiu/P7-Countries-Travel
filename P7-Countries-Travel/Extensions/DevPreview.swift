@@ -47,6 +47,16 @@ class DevPreview {
         return trip
     }()
     
-    
+    static let previewTripEmptyURL: TripEntity = {
+        let context = TripsDataService.shared.context
+        
+        let trip = TripEntity(context: context)
+        trip.tripCity = "Rome"
+        trip.tripCountry = "ITA"
+        trip.tripDesc = "Colosseum trip we going on"
+        trip.tripImageURL = ""
+        
+        return trip
+    }()
     
 }

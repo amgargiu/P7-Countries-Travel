@@ -21,8 +21,5 @@ class NewTripViewModel: ObservableObject {
             tripCity: tripCity, tripCountry: tripCountry, tripDesc: tripDesc, tripImageURL: tripImageURL)
     }
     
-    func refreshData() {
-        dataService.fetchData()
-    }
     
 }

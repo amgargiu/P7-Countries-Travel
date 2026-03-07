@@ -27,7 +27,6 @@ class TripsDataService {
         }
     }
     
-    
     // get request NSFetch
     func fetchData() {
         let request = NSFetchRequest<TripEntity>(entityName: "TripEntity")
@@ -49,7 +48,6 @@ class TripsDataService {
         saveAndRefresh()
     }
     
-    
     //update existing TripEntity
     func update(entity: TripEntity, newCity: String, newDesc: String, newImageURL: String) {
         entity.tripCity = newCity
@@ -63,6 +61,7 @@ class TripsDataService {
         container.viewContext.delete(entity)
         saveAndRefresh()
     }
+    
     
     // save
     func save() {
@@ -84,6 +83,7 @@ class TripsDataService {
         
         do {
             try container.viewContext.execute(deleteRequest)
+            print("Batch Deleting Trip Entities")
             saveAndRefresh()
         } catch let error {
             print("Error deleting all trips: \(error)")

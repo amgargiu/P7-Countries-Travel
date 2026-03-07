@@ -36,8 +36,10 @@ struct CountryRowView: View {
             }
             .frame(maxWidth: UIScreen.main.bounds.width / 3, alignment: .trailing)
             
-            
-        }
+        } // End HStack
+        .background(
+            Color(.systemBackground)
+        )
         .frame(maxWidth: .infinity)
         .padding(.horizontal)
         
