@@ -30,21 +30,23 @@ struct TripListItemView: View {
                     Spacer()
                     
                     
-                    if let key = tripEntity.tripCountry,
-                       let image = CacheManager.instance.get(key: key) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                    }
                     
                     if let key = tripEntity.tripCountry,
-                       let image = CacheManager.instance.get(key: key) {
+                       let image = vm.tripFlagImages[key] {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 50, height: 50)
+                    } else {
+                        if let key = tripEntity.tripCountry,
+                           let image = CacheManager.instance.get(key: key) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                        }
                     }
+                    
                 }
                 .padding(.top, 40) // 👈 push content DOWN to make space for image
                 .padding()

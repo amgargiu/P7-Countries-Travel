@@ -24,6 +24,8 @@ class AllTripsViewModel: ObservableObject {
 
     
     private let tripsDataService = TripsDataService.shared // the CoreData class
+    let countryDataService = CountryDataService()
+
     var cancellables: Set<AnyCancellable> = []
     
     let fileManager = LocalFileManager.instance // FM
@@ -52,6 +54,7 @@ class AllTripsViewModel: ObservableObject {
     
     func clearAllTripsFromCoreData() {
         tripsDataService.deleteAllTrips()
+        print( "deleted all CD entities")
     }
     
     func updateCoreDataEntity(entity: TripEntity, newCity: String, newDesc: String, newImageURL: String) {
@@ -109,7 +112,7 @@ class AllTripsViewModel: ObservableObject {
             folderName: tripImageFolderName
         ) {
             tripImages[trip.objectID] = savedImage
-            print("found image in FM and set to Dic")
+            print("found trip image in FM and set to Dict")
 
             return
         } else {
@@ -172,12 +175,25 @@ class AllTripsViewModel: ObservableObject {
     
     func clearAllTripImages() { // From FM and Dictionary
         
-        // 1️⃣ delete images from FileManager
+        // 1️⃣ delete trip images from FileManager
         fileManager.deleteFolder(folderName: self.tripImageFolderName)
-        print("deleted image folder from FM")
-        // 2️⃣ clear in-memory dictionary
+        print("deleted trip image folder from FM")
+        
+        fileManager.deleteFolder(folderName: self.FlagImageFolderName)
+        print("deleted flag image folder from FM")
+        
+        
+        // 2️⃣ clear trip Image dictionary for images and flags
         tripImages.removeAll()
-        print("clear in-memory dictionary")
+        tripFlagImages.removeAll()
+        print("clear trip images and trip flag images dictionaries")
+        
+        let count = fileManager.fileCount(folderName: tripImageFolderName)
+        let count2 = fileManager.fileCount(folderName: FlagImageFolderName)
+
+        print("trip files stored:", count)
+        print("flag files stored:", count2)
+
 
     }
     
@@ -194,8 +210,9 @@ class AllTripsViewModel: ObservableObject {
                 folderName: FlagImageFolderName
             ) {
                 // found saved image - put it in the dictionary
+                print("was able to get the flag image from FM")
                 tripFlagImages[imageName] = savedImage
-                return
+                continue // return would stop the LOOP
             } else {
                 downloadTripFlagImage(for: trip)
             }
@@ -204,12 +221,50 @@ class AllTripsViewModel: ObservableObject {
         }
     }
     
+    // passing in a single trip entity here btw
     func downloadTripFlagImage(for trip: TripEntity) {
         
         guard let imageName = trip.tripCountry else { return }
-        guard let url = URL(string: "https://example.com/\(imageName).png") else { return }
+        print("entering the trip flag download function for FM/Dict")
+        countryDataService.$allCountries
+            .map { allCountriesArray -> URL? in
+                    
+                let country = allCountriesArray.first(where: { $0.id == imageName })
+                let urlString = country?.flags?.png ?? ""
+                let url = URL(string: urlString)
+                return url
+            }
+            .compactMap { $0 }
+            .flatMap { url in
+                URLSession.shared.dataTaskPublisher(for: url)
+            }
+            .map { output -> UIImage? in
+                return UIImage(data: output.data)
+            }
+            .sink { completion in
+                print(completion)
+            } receiveValue: { [weak self] image in
+                guard
+                    let self = self,
+                    let image = image
+                else { return }
+
+                // Save to FileManager
+                fileManager.save(
+                    image: image,
+                    imageName: imageName,
+                    folderName: self.FlagImageFolderName
+                )
+                print("saved image:", imageName)
+
+                // Store in dictionary (auto refresh UI)
+                
+                DispatchQueue.main.async {
+                    self.tripFlagImages[imageName] = image
+                }
+            }
+            .store(in: &cancellables)
         
-        URLSession.shared.dataTaskPublisher(for: <#T##URL#>)
         
     }
     
