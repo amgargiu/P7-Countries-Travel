@@ -11,6 +11,7 @@ import Foundation
 class DevPreview {
     
     // Sample Country for preview provider
+    
     static let previewCountry = CountryModel(
         id: "ZAF", // Using the cca3 code as the ID
         flags: Flags(
@@ -31,9 +32,11 @@ class DevPreview {
         population: 63100945
     )
     
-    // sample HomeViewModel instance
+    // sample CountryListVM instance
     static let vm = CountryListViewModel()
     
+    
+    // CoreData Entites
     
     static let previewTrip: TripEntity = {
         let context = TripsDataService.shared.context

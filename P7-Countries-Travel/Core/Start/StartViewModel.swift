@@ -22,6 +22,7 @@ class StartViewModel: ObservableObject {
         "https://i.pinimg.com/736x/72/3e/aa/723eaaf25cd18c303b71d70fd43b1659.jpg"
     ]
     @Published var downloadedImages: [UIImage?] = []
+    
     var cancellables: Set<AnyCancellable> = []
     let cachManager = CacheManager.instance
     

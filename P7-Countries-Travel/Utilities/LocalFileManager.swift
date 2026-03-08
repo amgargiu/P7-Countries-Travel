@@ -47,41 +47,6 @@ class LocalFileManager {
         return UIImage(contentsOfFile: path.path)
     }
     
-    
-    
-    
-    //Create the folder if needed
-    private func createFolderIfNeeded(folderName: String) {
-        
-        guard let url = folderPath(folderName: folderName) else { return }
-        
-        if !FileManager.default.fileExists(atPath: url.path) {
-            do {
-                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-
-            } catch let error {
-                print("error creating folder \(error)")
-            }
-        }
-        
-    }
-    
-    
-    //manually make folder path - URL
-    private func folderPath(folderName: String) -> URL? {
-        guard let path = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
-        return path.appendingPathComponent(folderName)
-    }
-    
-    
-    //manually make image path - URL
-    private func imagePath(imageName: String, folderName: String) -> URL? {
-        guard let folderPath = folderPath(folderName: folderName) else { return nil }
-        let imagePath = folderPath.appendingPathComponent(imageName + ".png")
-        return imagePath
-    }
-    
-    
     // Delete from FM
     
     func delete(imageName: String, folderName: String) {
@@ -110,6 +75,41 @@ class LocalFileManager {
             print("error deleting file \(error)")
         }
     }
+    
+    
+    
+    //Create the folder if needed
+    private func createFolderIfNeeded(folderName: String) {
+        
+        guard let url = folderPath(folderName: folderName) else { return }
+        
+        if !FileManager.default.fileExists(atPath: url.path) {
+            do {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+
+            } catch let error {
+                print("error creating folder \(error)")
+            }
+        }
+    }
+    
+    
+    //manually make folder path - URL
+    private func folderPath(folderName: String) -> URL? {
+        guard let path = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
+        return path.appendingPathComponent(folderName)
+    }
+    
+    
+    //manually make image path - URL
+    private func imagePath(imageName: String, folderName: String) -> URL? {
+        guard let folderPath = folderPath(folderName: folderName) else { return nil }
+        let imagePath = folderPath.appendingPathComponent(imageName + ".png")
+        return imagePath
+    }
+    
+    
+   
     
     
     

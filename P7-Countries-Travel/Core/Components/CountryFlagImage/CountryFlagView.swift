@@ -20,7 +20,6 @@ struct CountryFlagView: View {
     
     var body: some View {
         ZStack {
-            
             if let image = vm.flagImage {
                 VStack {
                     Image(uiImage: image)

@@ -34,7 +34,7 @@ class NetworkingManager {
         URLSession.shared.dataTaskPublisher(for: url)
             .subscribe(on: DispatchQueue.global(qos: .background))
             .receive(on: DispatchQueue.main)
-            .tryMap( {try handleURLResponse(output: $0, url: url)} ) // not sure why the try here... and why n a closure
+            .tryMap( {try handleURLResponse(output: $0, url: url)} ) // not sure why the try here... and why in a closure
             .eraseToAnyPublisher()
     } // End download func
     
@@ -45,7 +45,7 @@ class NetworkingManager {
         else {
             throw NetworkError.badURLResponse(url: url) // we are throwing a error type (localizedErrorType is the type for the enum I guess
         }
-        return output.data
+        return output.data // for decoding into JSON
     }
     
     static func handleSinkCompletion(receivedCompletion: Subscribers.Completion<any Error>) {

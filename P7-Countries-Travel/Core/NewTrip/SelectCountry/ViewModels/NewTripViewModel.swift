@@ -17,6 +17,7 @@ class NewTripViewModel: ObservableObject {
     private let dataService = TripsDataService.shared
     
     func addTrip(tripCity: String, tripCountry: String, tripDesc: String, tripImageURL: String) {
+        print("created new entity")
         dataService.add(
             tripCity: tripCity, tripCountry: tripCountry, tripDesc: tripDesc, tripImageURL: tripImageURL)
     }

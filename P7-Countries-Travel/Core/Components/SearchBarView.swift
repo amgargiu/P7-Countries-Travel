@@ -16,11 +16,8 @@ struct SearchBarView: View {
         
         
         HStack {
-            
             Image(systemName: "magnifyingglass")
-            
             TextField("type here", text: $textfieldText)
-            
             Image(systemName: "xmark.circle")
                 .frame(width: 40, height: 20, alignment: .trailing)
                 .foregroundStyle(Color(.tertiaryLabel))

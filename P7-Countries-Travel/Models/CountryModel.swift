@@ -7,8 +7,34 @@
 
 import Foundation
 
-
-//https://restcountries.com/
+// https://restcountries.com/
+//"https://restcountries.com/v3.1/all?fields=name,flags,capital,languages,population,cca3"
+/*
+ {
+   "flags": {
+     "png": "https://flagcdn.com/w320/vn.png",
+     "svg": "https://flagcdn.com/vn.svg",
+     "alt": "The flag of Vietnam features a large five-pointed yellow star on a red field."
+   },
+   "name": {
+     "common": "Vietnam",
+     "official": "Socialist Republic of Vietnam",
+     "nativeName": {
+       "vie": {
+         "official": "Cộng hòa xã hội chủ nghĩa Việt Nam",
+         "common": "Việt Nam"
+       }
+     }
+   },
+   "languages": {
+     "vie": "Vietnamese"
+   },
+   "capital": [
+     "Hanoi"
+   ],
+   "population": 101343800
+ }
+ */
 
 struct CountryModel: Codable, Identifiable, Hashable {
     let id: String
