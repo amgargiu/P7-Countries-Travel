@@ -21,35 +21,18 @@ struct AllTripsView: View {
             ScrollView {
                 VStack(spacing: 50) {
                     ForEach(vm.trips) { trip in
-                        
                         TripListItemView(tripEntity: trip, vm: vm)
                             .onTapGesture {
                                 self.selectedTrip = trip
                             }
-                        
-                        //                VStack(alignment: .leading) {
-                        //                    Text(trip.tripCountry ?? "")
-                        //                    Text(trip.tripCity ?? "")
-                        //                    Text(trip.tripImageURL ?? "")
-                        //                    Text(trip.tripDesc ?? "")
-                        //                    if let key = trip.tripCountry,
-                        //                       let image = CacheManager.instance.get(key: key) {
-                        //                        Image(uiImage: image)
-                        //                            .resizable()
-                        //                            .scaledToFit()
-                        //                            .frame(height: 200)
-                        //                    }
-                        //                }
                     }
-                    
-                    
-                }
+                } // End VStack
                 .frame(maxWidth: .infinity)
                 .padding(.top, 50)
                 .sheet(item: $selectedTrip) { trip in
                     TripDetailView(tripEntity: trip, vm: vm, selectedTrip: $selectedTrip)
                 }
-            }
+            } // End ScrollView
             .navigationTitle("All Trips")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

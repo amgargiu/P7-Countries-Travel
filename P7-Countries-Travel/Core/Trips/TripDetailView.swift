@@ -42,6 +42,7 @@ struct TripDetailView: View {
                             .bold()
                         Text(tripEntity.tripCountry ?? "")
                     }
+                    
                     TextField("What City?", text: $cityTextField)
                         .foregroundStyle(.secondary)
                         .padding(.horizontal,10)
@@ -50,32 +51,8 @@ struct TripDetailView: View {
                                 .fill(Color(.systemGray6))
                         )
                     
+                    tripImage
                     
-                    
-                    if imageURL == nil || imageURL == "" {
-                        Image("default")
-                            .resizable()
-                            .frame(height: 300)
-                            .scaledToFit()
-                            .cornerRadius(10)
-                    } else if let image = vm.tripImages[tripEntity.objectID] {
-                        Image(uiImage: image)
-                            .resizable()
-                            .frame(height: 300)
-                            .scaledToFit()
-                            .cornerRadius(10)
-                    } else {
-                        let url = URL(string: imageURL ?? "")
-                        AsyncImage(url: url) { image in
-                            image
-                                .resizable()
-                                .frame(height: 300)
-                                .scaledToFit()
-                                .cornerRadius(10)
-                        } placeholder: {
-                            ProgressView()
-                        }
-                    }
                     
                     HStack {
                         TextField("Cover Photo URL", text: $imageURLTextField)
@@ -86,33 +63,19 @@ struct TripDetailView: View {
                                     .fill(Color(.systemGray6))
                             )
                         
-                        
                         Button("Update Photo") {
                             imageURL = imageURLTextField
+                            // clear dictionary for this key : image pair
+                            vm.tripImages.removeValue(forKey: tripEntity.objectID)
+                            // delete file FM
+                            vm.deleteImageFromFM(for: tripEntity)
                             imageURLTextField = ""
-                            guard let newURL = imageURL else { return }
-                                // update entity temporarily so VM uses new URL
-                                tripEntity.tripImageURL = newURL
-                                // clear memory cache
-                                vm.tripImages.removeValue(forKey: tripEntity.objectID)
-                                // delete file cache
-                                vm.deleteImageFromFM(for: tripEntity)
-                                // download new image
-                                vm.getTripImage(for: tripEntity)
                         }
                         .buttonStyle(.borderedProminent)
                     }
                     
-                    
-                    TextEditor(text: $tripDesc)
-                        .frame(height: 150)
-                        .scrollContentBackground(.hidden)
-                        .padding(8)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                    
+                    textEditorDesc
                     Text(tripEntity.tripImageURL ?? "No Image")
-                    
                     Spacer()
                     
                 }
@@ -126,7 +89,7 @@ struct TripDetailView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Update Trip") {
-                            // Function to Update to CD - onyl reason we observed the VM
+                            // Function to Update to CD - only reason we observed the VM
                             vm.updateCoreDataEntity(
                                 entity: tripEntity,
                                 newCity: cityTextField,
@@ -134,6 +97,7 @@ struct TripDetailView: View {
                                 newImageURL: imageURL ?? ""
                             )
                             selectedTrip = nil
+                            vm.getTripImage(for: tripEntity)
                         }
                     }
                     
@@ -141,7 +105,7 @@ struct TripDetailView: View {
                         Button("Delete Trip") {
                             // Function to Update to CD - onyl reason we observed the VM
                             vm.deleteSingleEntityFromCoreData(entity: tripEntity)
-                            vm.deleteImageFromFM(for: tripEntity)
+                            vm.deleteImageFromFM(for: tripEntity) // and Dict
                             selectedTrip = nil
                         }
                         .foregroundStyle(Color(.systemRed))
@@ -166,4 +130,45 @@ struct TripDetailView: View {
 
 #Preview {
     TripDetailView(tripEntity: DevPreview.previewTrip, vm: AllTripsViewModel(), selectedTrip: .constant(DevPreview.previewTrip))
+}
+
+extension TripDetailView {
+    
+    var tripImage : some View {
+        ZStack {
+            if imageURL == nil || imageURL == "" {
+                Image("default")
+                    .resizable()
+                    .frame(height: 300)
+                    .scaledToFit()
+                    .cornerRadius(10)
+            } else if let image = vm.tripImages[tripEntity.objectID] {
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(height: 300)
+                    .scaledToFit()
+                    .cornerRadius(10)
+            } else {
+                let url = URL(string: imageURL ?? "")
+                AsyncImage(url: url) { image in
+                    image
+                        .resizable()
+                        .frame(height: 300)
+                        .scaledToFit()
+                        .cornerRadius(10)
+                } placeholder: {
+                    ProgressView()
+                }
+            }
+        }
+    }
+    
+    var textEditorDesc: some View {
+        TextEditor(text: $tripDesc)
+            .frame(height: 150)
+            .scrollContentBackground(.hidden)
+            .padding(8)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+    }
 }

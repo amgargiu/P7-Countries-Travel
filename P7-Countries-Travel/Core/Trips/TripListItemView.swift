@@ -17,49 +17,53 @@ struct TripListItemView: View {
     var body: some View {
         
         ZStack(alignment: .top) {
-            
-            // BACK CARD
-            VStack {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading) {
-                        Text(tripEntity.tripCountry ?? "")
-                            .font(.headline)
-                        Text(tripEntity.tripCity ?? "")
-                            .font(.subheadline)
-                    }
-                    Spacer()
-                    
-                    
-                    
-                    if let key = tripEntity.tripCountry,
-                       let image = vm.tripFlagImages[key] {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                    } else {
-                        if let key = tripEntity.tripCountry,
-                           let image = CacheManager.instance.get(key: key) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 50, height: 50)
-                        }
-                    }
-                    
-                }
-                .padding(.top, 40) // 👈 push content DOWN to make space for image
-                .padding()
+            // Labels and Flags
+            HStack(alignment: .top) {
+                countryAndCity
+                Spacer()
+                // Trip Country Flag
+                flagImage
             }
+            .padding()
+            .padding(.top, 40) // 👈 push  DOWN for image - before background so it also applies to this space
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .fill(.thinMaterial)
                     .shadow(color: Color.black.opacity(0.5), radius: 5)
             )
-            
-          
-            
             // FRONT IMAGE (on top)
+            tripImage
+        }
+        .frame(width: 300)
+        .padding()
+        .onAppear {
+            vm.getTripImage(for: tripEntity)
+        }
+
+        
+    }
+}
+
+#Preview {
+    ZStack {
+        Color.red
+        VStack {
+            Spacer()
+            TripListItemView(tripEntity: DevPreview.previewTrip, vm: AllTripsViewModel())
+            Spacer()
+            TripListItemView(tripEntity: DevPreview.previewTripEmptyURL, vm: AllTripsViewModel())
+            Spacer()
+        }
+    }
+    
+}
+
+
+extension TripListItemView {
+    
+    
+    var tripImage: some View {
+        ZStack {
             if tripEntity.tripImageURL == "" {
                 Image("default")
                     .resizable()
@@ -91,28 +95,39 @@ struct TripListItemView: View {
                     ProgressView()
                 }
             }
-            
-            
-        }
-        .frame(width: 300)
-        .padding()
-        .onAppear {
-            vm.getTripImage(for: tripEntity)
-        }
-
-        
-    }
-}
-
-#Preview {
-    ZStack {
-        Color.red
-        VStack {
-            Spacer()
-            TripListItemView(tripEntity: DevPreview.previewTrip, vm: AllTripsViewModel())
-            Spacer()
-            TripListItemView(tripEntity: DevPreview.previewTripEmptyURL, vm: AllTripsViewModel())
         }
     }
     
+    
+    var countryAndCity: some View {
+        VStack(alignment: .leading) {
+            Text(tripEntity.tripCountry ?? "")
+                .font(.headline)
+            Text(tripEntity.tripCity ?? "")
+                .font(.subheadline)
+        }
+    }
+    
+    var flagImage: some View {
+        ZStack {
+            if let key = tripEntity.tripCountry,
+               let image = vm.tripFlagImages[key] {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+            } else {
+                if let key = tripEntity.tripCountry,
+                   let image = CacheManager.instance.get(key: key) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                }
+            }
+        }
+    }
+    
+    
 }
+

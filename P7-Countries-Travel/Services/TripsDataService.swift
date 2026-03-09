@@ -18,7 +18,7 @@ class TripsDataService {
         container.viewContext
     }
     
-    init() {
+    private init() {
         container = NSPersistentContainer(name: "TripContainer")
         container.loadPersistentStores { data, error in
             if let error = error {

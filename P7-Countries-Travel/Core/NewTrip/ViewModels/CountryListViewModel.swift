@@ -27,22 +27,25 @@ class CountryListViewModel: ObservableObject {
         
         countryDataService.$allCountries
             .combineLatest($searchText)
-            .map { countries, searchText in
-                if searchText.isEmpty {
-                    return countries
-                } else {
-                    let lowercaseText = searchText.lowercased()
-                    return countries.filter { country in
-                        let name = country.name?.common?.lowercased() ?? ""
-                        return name.contains(lowercaseText)                    }
-                }
-            }
+            .map(mapResultingArray)
             .sink { returnedArray in
                 self.allCountries = returnedArray
             }
             .store(in: &cancellables)
-        
-        
     }
+    
+    
+    func mapResultingArray(countries: [CountryModel], searchText: String) -> [CountryModel] {
+        if searchText.isEmpty {
+            return countries
+        } else {
+            let lowercaseText = searchText.lowercased()
+            return countries.filter { country in
+                let name = country.name?.common?.lowercased() ?? ""
+                return name.contains(lowercaseText)
+            }
+        }
+    }
+    
     
 }

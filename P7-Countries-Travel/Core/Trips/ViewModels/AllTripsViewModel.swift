@@ -24,7 +24,7 @@ class AllTripsViewModel: ObservableObject {
 
     
     private let tripsDataService = TripsDataService.shared // the CoreData class
-    let countryDataService = CountryDataService()
+    private let countryDataService = CountryDataService()
 
     var cancellables: Set<AnyCancellable> = []
     
@@ -70,21 +70,21 @@ class AllTripsViewModel: ObservableObject {
          3 - remove it from the dictionary
          4 - call that getImage() func for that entity we just updated
          */
-            if oldURL != newImageURL {
+        if oldURL != newImageURL {
 
-                // IF URL is new - go to the image saved for this entity and delete it from FM
-                let imageName = entity.objectID.uriRepresentation().lastPathComponent
-                fileManager.delete(
-                    imageName: imageName,
-                    folderName: tripImageFolderName
-                )
-                print("New URL, deleted old image")
+            // IF URL is new - go to the image saved for this entity and delete it from FM
+            let imageName = entity.objectID.uriRepresentation().lastPathComponent
+            fileManager.delete(
+                imageName: imageName,
+                folderName: tripImageFolderName
+            )
+            print("New URL, deleted old image")
 
 
-                tripImages.removeValue(forKey: entity.objectID) // if image URL is changed - delete key for that image in Dict. Caal getTripImage again to reset that up for new image
+            tripImages.removeValue(forKey: entity.objectID) // if image URL is changed - delete key for that image in Dict. Caal getTripImage again to reset that up for new image
 
-                getTripImage(for: entity)
-            }
+            getTripImage(for: entity)
+        }
     }
     
     
@@ -228,13 +228,12 @@ class AllTripsViewModel: ObservableObject {
         print("entering the trip flag download function for FM/Dict")
         countryDataService.$allCountries
             .map { allCountriesArray -> URL? in
-                    
-                let country = allCountriesArray.first(where: { $0.id == imageName })
-                let urlString = country?.flags?.png ?? ""
+                guard let country = allCountriesArray.first(where: { $0.id == imageName }) else { return nil }
+                guard let urlString = country.flags?.png else { return nil }
                 let url = URL(string: urlString)
                 return url
             }
-            .compactMap { $0 }
+            .compactMap { $0 } // check for nils - remove if nil
             .flatMap { url in
                 URLSession.shared.dataTaskPublisher(for: url)
             }

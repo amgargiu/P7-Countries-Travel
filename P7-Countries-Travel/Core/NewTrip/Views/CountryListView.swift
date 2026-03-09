@@ -17,19 +17,9 @@ struct CountryListView: View {
 
         VStack {
             SearchBarView(textfieldText: $vm.searchText)
-            .padding()
+                .padding()
             
-            HStack {
-                Text("Flag")
-                    .offset(x: 30)
-                Spacer()
-                Text("Country")
-                Spacer()
-                Spacer()
-                Text("Population & Capital")
-                    .offset(x: -20)
-            }
-            .foregroundStyle(.secondary)
+            columnHeaders
 
             List {
                 ForEach(vm.allCountries) { country in
@@ -54,4 +44,22 @@ struct CountryListView: View {
         CountryListView(path: .constant([]))
             .environmentObject(DevPreview.vm)
     }
+}
+
+extension CountryListView {
+    
+    var columnHeaders : some View {
+        HStack {
+            Text("Flag")
+                .offset(x: 30)
+            Spacer()
+            Text("Country")
+            Spacer()
+            Spacer()
+            Text("Population & Capital")
+                .offset(x: -20)
+        }
+        .foregroundStyle(.secondary)
+    }
+    
 }
