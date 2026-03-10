@@ -191,9 +191,10 @@ class AllTripsViewModel: ObservableObject {
         let count = fileManager.fileCount(folderName: tripImageFolderName)
         let count2 = fileManager.fileCount(folderName: FlagImageFolderName)
 
-        print("trip files stored:", count)
-        print("flag files stored:", count2)
-
+        print("trip img files stored:", count)
+        print("flag img files stored:", count2)
+        
+        tripsDataService.getEntitiyCount()
 
     }
     

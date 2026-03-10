@@ -12,7 +12,7 @@ struct TripDetailView: View {
     //@Observed since already init this viewmodel
     @ObservedObject var vm: AllTripsViewModel // just need for the update function
     @ObservedObject var tripEntity: TripEntity
-
+    
     @Binding var selectedTrip: TripEntity?
     
     // Trip Entity - city, country, imageURL, Des
@@ -20,7 +20,7 @@ struct TripDetailView: View {
     @State var tripDesc: String = ""
     @State var imageURL: String? = nil
     @State var imageURLTextField: String = ""
-
+    
     init(tripEntity: TripEntity, vm: AllTripsViewModel, selectedTrip: Binding<TripEntity?>) {
         self.tripEntity = tripEntity
         self.cityTextField = tripEntity.tripCity ?? ""
@@ -37,100 +37,51 @@ struct TripDetailView: View {
             ScrollView {
                 VStack (alignment: .leading) {
                     
-                    HStack {
-                        Text("Country:")
-                            .bold()
-                        Text(tripEntity.tripCountry ?? "")
-                    }
-                    
-                    TextField("What City?", text: $cityTextField)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal,10)
-                        .background(
-                            Capsule()
-                                .fill(Color(.systemGray6))
-                        )
-                    
+                    tripCountry
+                    cityTF
                     tripImage
-                    
-                    
                     HStack {
-                        TextField("Cover Photo URL", text: $imageURLTextField)
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal,5)
-                            .background(
-                                Capsule()
-                                    .fill(Color(.systemGray6))
-                            )
-                        
-                        Button("Update Photo") {
-                            imageURL = imageURLTextField
-                            // clear dictionary for this key : image pair
-                            vm.tripImages.removeValue(forKey: tripEntity.objectID)
-                            // delete file FM
-                            vm.deleteImageFromFM(for: tripEntity)
-                            imageURLTextField = ""
-                        }
-                        .buttonStyle(.borderedProminent)
+                        tripPhotoTF
+                        updatePhototButton
                     }
-                    
-                    textEditorDesc
-                    Text(tripEntity.tripImageURL ?? "No Image")
-                    Spacer()
-                    
                 }
-                .padding(.horizontal)
-                .navigationTitle("Your Trip")
-                .toolbar {
-                    
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        XMarkButton()
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Update Trip") {
-                            // Function to Update to CD - only reason we observed the VM
-                            vm.updateCoreDataEntity(
-                                entity: tripEntity,
-                                newCity: cityTextField,
-                                newDesc: tripDesc,
-                                newImageURL: imageURL ?? ""
-                            )
-                            selectedTrip = nil
-                            vm.getTripImage(for: tripEntity)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Delete Trip") {
-                            // Function to Update to CD - onyl reason we observed the VM
-                            vm.deleteSingleEntityFromCoreData(entity: tripEntity)
-                            vm.deleteImageFromFM(for: tripEntity) // and Dict
-                            selectedTrip = nil
-                        }
-                        .foregroundStyle(Color(.systemRed))
-                    }
-                    
-                    
-                    
-                }
-            } // End ScrollVuew
-            .scrollDismissesKeyboard(.interactively)
-            .onTapGesture {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                
+                textEditorDesc
+                Text(tripEntity.tripImageURL ?? "No Image")
+                Spacer()
             }
+            .padding(.horizontal)
+            .navigationTitle("Your Trip")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) { XMarkButton() }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Update Trip") {
+                        // Function to Update to CD - only reason we observed the VM
+                        updateEntityandGetImage()
+                    }
+                    .foregroundStyle(.green)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Delete Trip") {
+                        // Function to Update to CD - onyl reason we observed the VM
+                        deleteEntityAndImage()
+                    }
+                    .foregroundStyle(Color(.systemRed))
+                }  
+            }
+        } // End ScrollVuew
+        .scrollDismissesKeyboard(.interactively)
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-
-
-        
     }
-    
-    
 }
+
 
 #Preview {
     TripDetailView(tripEntity: DevPreview.previewTrip, vm: AllTripsViewModel(), selectedTrip: .constant(DevPreview.previewTrip))
 }
+
 
 extension TripDetailView {
     
@@ -171,4 +122,64 @@ extension TripDetailView {
             .background(Color(.systemGray6))
             .cornerRadius(10)
     }
+    
+    var tripCountry: some View {
+        HStack {
+            Text("Country:")
+                .bold()
+            Text(tripEntity.tripCountry ?? "")
+        }
+    }
+    
+    var cityTF : some View {
+        TextField("What City?", text: $cityTextField)
+            .foregroundStyle(.secondary)
+            .padding(.horizontal,10)
+            .background(
+                Capsule()
+                    .fill(Color(.systemGray6))
+            )
+    }
+    
+    var tripPhotoTF: some View {
+        HStack {
+            TextField("Trip Photo URL", text: $imageURLTextField)
+                .foregroundStyle(.secondary)
+                .padding(.horizontal,5)
+                .background(
+                    Capsule()
+                        .fill(Color(.systemGray6))
+                )
+        }
+    }
+    
+    var updatePhototButton: some View {
+        Button("Update Photo") {
+            imageURL = imageURLTextField
+            // clear dictionary for this key : image pair
+            vm.tripImages.removeValue(forKey: tripEntity.objectID)
+            // delete file FM
+            vm.deleteImageFromFM(for: tripEntity)
+            imageURLTextField = ""
+        }
+        .buttonStyle(.borderedProminent)
+    }
+    
+    func updateEntityandGetImage() {
+        vm.updateCoreDataEntity(
+            entity: tripEntity,
+            newCity: cityTextField,
+            newDesc: tripDesc,
+            newImageURL: imageURL ?? ""
+        )
+        selectedTrip = nil
+        vm.getTripImage(for: tripEntity)
+    }
+    
+    func deleteEntityAndImage() {
+        vm.deleteSingleEntityFromCoreData(entity: tripEntity)
+        vm.deleteImageFromFM(for: tripEntity) // and Dict
+        selectedTrip = nil
+    }
+    
 }

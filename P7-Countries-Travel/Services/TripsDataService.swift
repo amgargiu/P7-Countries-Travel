@@ -90,6 +90,14 @@ class TripsDataService {
         }
     }
     
+    func getEntitiyCount()  {
+        let request: NSFetchRequest<TripEntity> = TripEntity.fetchRequest()
+
+        let entityCount = try? container.viewContext.count(for: request)
+
+        print("TripEntity count:", entityCount ?? 0)
+    }
+    
     
     
     
