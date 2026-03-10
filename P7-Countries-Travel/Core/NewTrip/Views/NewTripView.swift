@@ -119,16 +119,25 @@ extension NewTripView {
                     .cornerRadius(10)
             } else {
                 let url = URL(string: inputURL ?? "")
-                AsyncImage(url: url) { image in
-                    image
-                        .resizable()
-                        .frame(height: 300)
-                        .frame(maxWidth: .infinity)
-                        .scaledToFit()
-                        .cornerRadius(10)
-                } placeholder: {
-                    ProgressView()
+                AsyncImage(url: URL(string: inputURL ?? "")) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .frame(height: 300)
+                            .frame(maxWidth: .infinity)
+                            .scaledToFit()
+                            .cornerRadius(10)
+                    case .failure:
+                        Text("Image failed to load")
+
+                    @unknown default:
+                        EmptyView()
+                    }
                 }
+                .id(inputURL)
             }
         } // end Z
     }

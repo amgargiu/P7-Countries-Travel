@@ -26,14 +26,11 @@ class CountryFlagViewModel: ObservableObject {
     }
     
     func addSub() {
-        
         countryFlagDataService.$countryFlagPNG
             .sink(receiveValue: { [weak self] flagPNG in
                 self?.flagImage = flagPNG
             })
             .store(in: &cancellables)
-                  
-        
     }
     
     

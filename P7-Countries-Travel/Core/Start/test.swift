@@ -12,14 +12,20 @@ struct test: View {
     @StateObject var vm = StartViewModel()
     
     var body: some View {
-        VStack {
-            if let firstImage = vm.downloadedImages.first {
-                Image(uiImage: firstImage ?? UIImage())
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-            } else {
-                ProgressView() // loading state
+        ScrollView {
+            VStack {
+                
+                if let firstImage = vm.downloadedImages.first {
+                    Image(uiImage: firstImage ?? UIImage())
+                        .resizable()
+                        .scaledToFit()
+                        .ignoresSafeArea()
+                } else {
+                    ProgressView() // loading state
+                }
+                
+                let URL = URL(string: "https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg")!
+                AsyncImage(url: URL)
             }
         }
     }
