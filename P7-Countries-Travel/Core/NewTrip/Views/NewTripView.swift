@@ -44,7 +44,7 @@ struct NewTripView: View {
                 tripCapitalLabel
                 tripDescTF
                 Spacer()
-            }
+            } // end Vstack
             .padding(.horizontal)
             .navigationTitle("New Trip")
             .navigationBarTitleDisplayMode(.large)
@@ -63,6 +63,7 @@ struct NewTripView: View {
                 } // End Toolbar Item
             }
         } // end ScrollView
+        .safeAreaPadding(.bottom, 120)
         .scrollDismissesKeyboard(.interactively)
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -100,13 +101,15 @@ extension NewTripView {
     }
     
     var tripImageURLTF: some View {
-        TextField("Cover Photo URL", text: $inputURLTextField)
-            .foregroundStyle(.secondary)
-            .padding(.horizontal,5)
-            .background(
-                Capsule()
-                    .fill(Color(.systemGray6))
-            )
+        TextField(text: $inputURLTextField) {
+            Text("Cover Photo URL")
+        }
+        .padding(5)
+        .padding(.horizontal,5)
+        .background(
+            Capsule()
+                .fill(Color(.systemGray6))
+        )
     }
     
     var tripImage : some View {

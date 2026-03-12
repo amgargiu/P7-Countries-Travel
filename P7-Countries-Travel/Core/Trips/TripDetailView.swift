@@ -49,7 +49,8 @@ struct TripDetailView: View {
                 textEditorDesc
                 Text(tripEntity.tripImageURL ?? "No Image")
                 Spacer()
-            }
+            } // end ScrollView
+            .safeAreaPadding(.bottom, 120)
             .padding(.horizontal)
             .navigationTitle("Your Trip")
             .toolbar {
@@ -69,7 +70,7 @@ struct TripDetailView: View {
                     .foregroundStyle(Color(.systemRed))
                 }  
             }
-        } // End ScrollVuew
+        }
         .scrollDismissesKeyboard(.interactively)
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -142,15 +143,15 @@ extension TripDetailView {
     }
     
     var tripPhotoTF: some View {
-        HStack {
-            TextField("Trip Photo URL", text: $imageURLTextField)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal,5)
-                .background(
-                    Capsule()
-                        .fill(Color(.systemGray6))
-                )
+        TextField(text: $imageURLTextField) {
+            Text("Cover Photo URL")
         }
+        .padding(5)
+        .padding(.horizontal,5)
+        .background(
+            Capsule()
+                .fill(Color(.systemGray6))
+        )
     }
     
     var updatePhototButton: some View {

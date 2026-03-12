@@ -44,7 +44,7 @@ struct StartView: View {
                         NewTripView(country: country, path: $path)
 
                     case .allTrips:
-                        AllTripsView()
+                        AllTripsView(path: $path)
                     }
                 }
             } // End ZStack
@@ -96,6 +96,7 @@ extension StartView {
     
     var buttons : some View {
         HStack (spacing: 50) {
+            
             Button {
                 path.append(.selectCountry)
             } label: {

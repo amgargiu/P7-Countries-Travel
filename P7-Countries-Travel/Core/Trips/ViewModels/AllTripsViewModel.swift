@@ -18,6 +18,7 @@ class AllTripsViewModel: ObservableObject {
     
     
     @Published var trips: [TripEntity] = [] // Array fo All Core Data Entities - update w/ sub to CD File
+    @Published var isLoading = true
     
     @Published var tripImages: [NSManagedObjectID: UIImage] = [:] // Dictionary fro Trip Images
     @Published var tripFlagImages: [String : UIImage] = [:] // Dictionary fro Trip Images
@@ -45,6 +46,7 @@ class AllTripsViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] savedEntities in
                 self?.trips = savedEntities
+                self?.isLoading = false
             })
             .store(in: &cancellables)
     }
