@@ -27,16 +27,17 @@ struct AllTripsView: View {
                         Button {
                             path.append(.selectCountry)
                         } label: {
-                            Text("New Trip")
-                                .foregroundStyle(Color.white)
-                                .frame(width: 130, height: 50)
+                            
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 120, height: 40)
+                                .shadow(color: .black.opacity(0.3), radius: 5, y: 10)
+                                .foregroundStyle(
+                                    Gradient(colors: [.red, .orange])
+                                )
                                 .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .frame(width: 120, height: 40)
-                                        .shadow(color: .black.opacity(0.3), radius: 5, y: 10)
-                                        .foregroundStyle(
-                                            Gradient(colors: [.red, .orange])
-                                        )
+                                    Text("New Trip")
+                                        .foregroundStyle(Color.white)
+                                        .frame(width: 130, height: 50)
                                 )
                                 .scaleEffect(animate ? 1.3 : 1.5)
                                 .animation(
