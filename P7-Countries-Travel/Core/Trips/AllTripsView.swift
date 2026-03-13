@@ -34,7 +34,7 @@ struct AllTripsView: View {
                                 .foregroundStyle(
                                     Gradient(colors: [.red, .orange])
                                 )
-                                .background(
+                                .overlay(
                                     Text("New Trip")
                                         .foregroundStyle(Color.white)
                                         .frame(width: 130, height: 50)
